@@ -1,7 +1,9 @@
-package smartattend;
+package smartattend.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import smartattend.Entity.ClassEntity;
+import smartattend.Repository.ClassRepository;
 
 import java.util.List;
 

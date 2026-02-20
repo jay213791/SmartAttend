@@ -1,4 +1,4 @@
-package smartattend;
+package smartattend.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import smartattend.QRCodeGenerator;
+import smartattend.Entity.Student;
+import smartattend.Repository.StudentRepository;
 
 
 @RestController

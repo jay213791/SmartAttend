@@ -1,4 +1,4 @@
-package smartattend;
+package smartattend.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package smartattend;
+package smartattend.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,21 +11,21 @@ import java.util.List;
 public class AdminController {
 
     @Autowired
-    private AdminRepository adminRepository;
+    private smartattend.Repository.AdminRepository adminRepository;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addAdmin(@RequestBody Admin admin){
+    public ResponseEntity<?> addAdmin(@RequestBody smartattend.Entity.Admin admin){
         if (adminRepository.existsByEmail(admin.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body("Email already exist");
         }
-        Admin savedAdmin = adminRepository.save(admin);
+        smartattend.Entity.Admin savedAdmin = adminRepository.save(admin);
         return ResponseEntity.ok(savedAdmin);
     }
 
     @GetMapping("/all")
-    public List<Admin> GetAllAdmins() {
+    public List<smartattend.Entity.Admin> GetAllAdmins() {
         return adminRepository.findAll();
     }
 

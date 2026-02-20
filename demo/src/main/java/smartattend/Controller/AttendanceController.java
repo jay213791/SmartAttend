@@ -1,7 +1,13 @@
-package smartattend;
+package smartattend.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import smartattend.*;
+import smartattend.Entity.Attendance;
+import smartattend.Repository.AttendanceRepository;
+import smartattend.Entity.ClassEntity;
+import smartattend.Repository.ClassRepository;
+import smartattend.Repository.StudentRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -30,7 +36,7 @@ public class AttendanceController {
 
 
         // Fetch student name
-        Optional<Student> student = studentRepository.findById(studentId);
+        Optional<smartattend.Entity.Student> student = studentRepository.findById(studentId);
         if (student.isEmpty()) {
             throw new RuntimeException("Student not found with ID: " + studentId);
         }

@@ -1,8 +1,10 @@
-package smartattend;
+package smartattend.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import smartattend.Entity.Teacher;
+import smartattend.Repository.TeacherRepository;
 
 import java.util.List;
 
