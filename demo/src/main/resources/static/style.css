@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #e9f0f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main-container{
+    display: flex;
+    width: 900px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+}
+
+.left-container{
+    flex: 1;
+    background-image: url("assets/bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right-container{
+    flex: 1;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+input{
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    font-size: 15px;
+    color: #155c63;
+    border: 1px solid #ccc;
+    outline: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+
+.password-wrapper input {
+    padding: 15px 45px 15px 15px;
+}
+
+.password-wrapper, .confirm-pass-wrapper {
+    position: relative;
+}
+
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 35%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #155c63;
+    font-size: 16px;
+}
+
+#loginForm {
+    position: relative;
+}
+
+#loginForm button{
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 25px;
+    border: none;
+    background: #1F7F8A;
+    color: white;
+    margin-top: 35px;
+    font-size: 17px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+button:hover{
+    background: #08a9bc;
+}
+
+#loginForm a {
+    position: absolute;
+    color: #1F7F8A;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    align-self: flex-end;
+    top: 8rem;
+    margin-left: 12.6rem;
+}
+
+.right-container p {
+    padding-top: 6px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.right-container a {
+    color: #1F7F8A;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+h2{
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #1F7F8A;
+}
+
+/* left container ma men */
+.shield-icon {
+    width: 80%;
+    max-width: 150px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.left-container h1 {
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
+.welcome {
+    font-weight: bolder;
+    margin: 0 auto;
+    font-size: 1.3rem;
+}
+
+.description{
+    font-size: 15px;
+    font-weight: lighter;
+    margin: 0.5rem auto 2rem;
+    text-align: center;
+    max-width: 90%;
+    word-wrap: break-word;
+}
+
+.highlight{
+    color: #1ce1f1;
+}
+
+
+/* Registration from style */
+
+#registerForm button{
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 25px;
+    border: none;
+    background: #1F7F8A;
+    color: white;
+    margin-top: 2px;
+    font-size: 17px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        height: auto;
+        width: 90%;
+    }
+
+    .left-panel, .right-panel {
+        padding: 30px;
+    }
+
+    .shield-icon {
+        width: 50%;
+        max-width: 120px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+}

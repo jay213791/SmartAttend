@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartAttend</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" sizes="50x50" href="assets/SmartAttend-LOGO.jpg">
+</head>
+<body>
+<div class="main-container">
+
+    <div class="left-container">
+        <img class="shield-icon" src="assets/shield.png" alt="shield">
+        <h1>SmartAttend</h1>
+        <p class="welcome">Welcome to <span class="highlight">SmartAttend</span></p>
+        <p class="description">Smart and simple attendance management.</p>
+    </div>
+
+    <div class="right-container">
+        <h2>Login</h2>
+
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email" required>
+
+            <div class="password-wrapper">
+                <input type="password" id="password" minlength="6" placeholder="Password" required>
+                <span class="toggle-password" onclick="togglePassword('passwordInput', 'eyeIcon')">
+                <i id="eyeIcon" class="fas fa-eye"></i>
+                </span>
+            </div>
+            <a class="forgot-pass" href="#">Forgot Password?</a>
+            <button type="submit">Login</button>
+        </form>
+        <p>
+            Don't have an account?
+            <a class="register" href="registration.html">Register</a>
+        </p>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

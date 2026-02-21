@@ -45,7 +45,7 @@ public class StudentController {
         // save ng student sa database
         Student savedStudent = studentRepository.save(student);
 
-        // Generate QR code image
+        // Generate QR code image tapos i save sa file
         String qrFilePath = "C:" + File.separator + "Users" + File.separator + "Christian Jay" + File.separator + "Downloads" + File.separator + savedStudent.getStudentNumber() + ".png";
 
         try {
