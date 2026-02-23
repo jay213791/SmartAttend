@@ -37,6 +37,16 @@ public class TeacherController {
         return teacherRepository.findAll();
     }
 
+    @GetMapping("/check-email")
+    public ResponseEntity<?> checkEmail(@RequestParam String email){
+        if (teacherRepository.existsByEmail(email)){
+            return ResponseEntity
+                    .badRequest()
+                    .body("Email already exist");
+        }
+        return ResponseEntity.ok("Email available");
+    }
+
     @DeleteMapping("/delete/{id}")
     public String deleteTeacher(@PathVariable int id){
         teacherRepository.deleteById(id);

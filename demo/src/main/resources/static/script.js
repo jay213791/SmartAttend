@@ -1,4 +1,4 @@
-//log in password
+//log in password eye icon
 function togglePassword() {
     const passwordInput = document.getElementById("password");
     const eyeIcon = document.getElementById("eyeIcon");
@@ -14,7 +14,7 @@ function togglePassword() {
     }
 }
 
-//register password
+//register password eye icon
 function RegisterTogglePass() {
     const RegisterPassword = document.getElementById("RegisterPassword");
     const RegisterEyeIcon = document.getElementById("RegisterEyeIcon");
@@ -30,7 +30,7 @@ function RegisterTogglePass() {
     }
 }
 
-// confirm password
+// confirm password eye icon
 function ConfirmPasswordToggle() {
     const ConfirmPassword = document.getElementById("ConfirmPassword");
     const ConfirmEyeIcon = document.getElementById("ConfirmEyeIcon");
@@ -47,28 +47,126 @@ function ConfirmPasswordToggle() {
 }
 
 //check muna the information
-document.getElementById("registerBtn").addEventListener("click", function (e){
+document.getElementById("registerForm").addEventListener("submit", function (e){
     e.preventDefault();
-    validateRegister(e);
+    validateRegister();
 });
 
-function validateRegister(event) {
-    event.preventDefault();
+
+// this function check kung yung email exists sa database
+async function checkEmailExists(email) {
+    try {
+        const response = await fetch(`/teacher/check-email?email=${email}`);
+
+        if (response.status === 400) {
+            return true;
+        } else if (response.ok) {
+            return false;
+        } else {
+            console.error("Unexpected server response: ", response.status, await response.text());
+            return true;
+        }
+      // this run if yung fetch ay hindi gumana (fetch sa back end)
+    } catch (error) {
+        console.error("Error checking email:", error);
+        return true;
+    }
+}
+
+// this function validate the register form
+async function validateRegister() {
 
     const password = document.getElementById("RegisterPassword").value;
     const confirmPassword = document.getElementById("ConfirmPassword").value;
+    const email = document.getElementById("register_email").value;
+    const name = document.getElementById("register_name").value;
+
+    if (!isValidEmail(email)) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid Email",
+            text: "Please enter valid email address",
+        });
+        return;
+    }
+
+    const exists  = await checkEmailExists(email);
+
+    if (exists) {
+        Swal.fire({
+            icon: "error",
+            title: "Email already exists",
+            text: "Please use different email address",
+        });
+        return;
+    }
 
     if (password.length < 6) {
-        alert("Password must be between 6 characters.");
-        return false;
+        Swal.fire({
+            icon: 'warning',
+            title: 'Warning',
+            text: 'Password must be at least 6 characters',
+            background: '#ffffff',
+            color: '#333',
+            confirmButtonColor: '#4e73df'
+        });
+        return;
     }
 
     if (password !== confirmPassword) {
-        alert("Password do not match.");
-        return false;
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Password do not match!',
+        });
+        return;
     }
 
-    alert("Registration successfully.");
-    return true;
+    const teacherData = {
+        name: name,
+        email: email,
+        password: password,
+    };
 
+    try {
+        const response = await fetch(`/teacher/add`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(teacherData),
+        });
+
+        if (response.ok) {
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Your account has been created successfully! Wait for admin approval.",
+                timer: 3000,
+                showConfirmButton: false,
+            }).then(() => {
+                document.getElementById("registerForm").reset();
+            });
+        } else {
+            const errorText = await response.text();
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: errorText || "Something went wrong",
+            });
+        }
+    } catch (error) {
+        console.error("Error submitting teacher:", error);
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Unable to connect to the server",
+        });
+    }
+}
+
+// function for email validation kung valid
+function isValidEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
 }
