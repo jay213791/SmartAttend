@@ -7,4 +7,5 @@ import smartattend.Entity.Teacher;
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     boolean existsByEmail(String email);
+    Teacher findByEmail(String email);
 }

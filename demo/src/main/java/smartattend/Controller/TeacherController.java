@@ -32,6 +32,25 @@ public class TeacherController {
         return ResponseEntity.ok(savedTeacher);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> loginTeacher(@RequestBody Teacher loginRequest) {
+        Teacher teacher = teacherRepository.findByEmail(loginRequest.getEmail());
+
+        if (teacher == null) {
+            return ResponseEntity.badRequest().body("Email not found");
+        }
+
+        if (!teacher.getPassword().equals(loginRequest.getPassword())) {
+            return ResponseEntity.badRequest().body("Wrong password");
+        }
+
+        if (!teacher.getStatus().equals("approved")) {
+            return ResponseEntity.badRequest().body("Account not yet approved");
+        }
+
+        return ResponseEntity.ok(teacher);
+    }
+
     @GetMapping("/all")
     public List<Teacher> GetallTeachers(){
         return teacherRepository.findAll();
