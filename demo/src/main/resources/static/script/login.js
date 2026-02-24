@@ -46,6 +46,7 @@ async function loginUser() {
 
         if (response.ok) {
             const data = await response.json();
+            // this part still need some changes para mas lalong secured
             localStorage.setItem("teacher", JSON.stringify(data));
 
             Swal.fire({
@@ -74,4 +75,14 @@ async function loginUser() {
             text: "Unable to connect to server",
         });
     }
+}
+
+// para sa reset password function
+
+function openForgotModal() {
+    document.getElementById("forgotModal").style.display = "block";
+}
+
+function closeForgotModal() {
+    document.getElementById("forgotModal").style.display = "none";
 }

@@ -1,5 +1,3 @@
-// ------ Register ------
-
 //register password eye icon
 function RegisterTogglePass() {
     const RegisterPassword = document.getElementById("RegisterPassword");
@@ -32,7 +30,7 @@ function ConfirmPasswordToggle() {
     }
 }
 
-//check muna the information
+//prevent from submitting yung form
 document.getElementById("registerForm").addEventListener("submit", function (e){
     e.preventDefault();
     validateRegister();
@@ -66,6 +64,14 @@ async function validateRegister() {
     const confirmPassword = document.getElementById("ConfirmPassword").value;
     const email = document.getElementById("register_email").value;
     const name = document.getElementById("register_name").value;
+
+    if (!password || !confirmPassword || !email || !name) {
+        Swal.fire({
+            icon: "warning",
+            title: "Missing Fields",
+            text: "Please fill up the form",
+        });
+    }
 
     if (!isValidEmail(email)) {
         Swal.fire({
