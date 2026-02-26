@@ -3,6 +3,7 @@ package smartattend.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -29,6 +30,12 @@ import java.time.LocalDate;
 
     @Column(name = "CREATED_AT")
     private LocalDate createdAt;
+
+    @Column(name = "RESETOTP", length = 20)
+    private String resetOtp;
+
+    @Column(name = "OTP_EXPIRY")
+    private LocalDateTime otpExpiry;
 
     @PrePersist
     public void onCreate() {

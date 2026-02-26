@@ -71,6 +71,7 @@ async function validateRegister() {
             title: "Missing Fields",
             text: "Please fill up the form",
         });
+        return;
     }
 
     if (!isValidEmail(email)) {

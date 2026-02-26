@@ -1,18 +1,28 @@
 package smartattend.Controller;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import smartattend.Entity.Teacher;
 import smartattend.Repository.TeacherRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/teacher")
 public class TeacherController {
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @PostMapping("/add")
     public ResponseEntity<?> addTeacher(@RequestBody Teacher teacher) {
@@ -51,6 +61,82 @@ public class TeacherController {
         return ResponseEntity.ok(teacher);
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        Teacher teacher = teacherRepository.findByEmail(email);
+
+        if(teacher == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Email not found");
+        }
+
+        String otp = String.valueOf(new Random().nextInt(900000) + 100000);
+
+        teacher.setResetOtp(otp);
+        teacher.setOtpExpiry(LocalDateTime.now().plusMinutes(5));
+
+        teacherRepository.save(teacher);
+
+        sendEmail(email, otp);
+
+        return ResponseEntity.ok("OTP sent");
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String otp = request.get("otp");
+
+        Teacher teacher = teacherRepository.findByEmail(email);
+
+        if (teacher == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid request");
+        }
+
+        if (teacher.getOtpExpiry().isBefore(LocalDateTime.now())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("OTP expired");
+        }
+
+        if (!teacher.getResetOtp().equals(otp)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid OTP");
+        }
+
+        return  ResponseEntity.ok("OTP verified");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String newPassword = request.get("password");
+
+        Teacher teacher = teacherRepository.findByEmail(email);
+
+        if (teacher == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid request");
+        }
+
+        teacher.setPassword(
+                new BCryptPasswordEncoder().encode(newPassword)
+        );
+
+        teacher.setResetOtp(null);
+        teacher.setOtpExpiry(null);
+
+        teacherRepository.save(teacher);
+
+        return ResponseEntity.ok("Password updated");
+    }
+
     @GetMapping("/all")
     public List<Teacher> GetallTeachers(){
         return teacherRepository.findAll();
@@ -78,5 +164,14 @@ public class TeacherController {
         Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Teacher not found"));
         teacher.setStatus("approved");
         return teacherRepository.save(teacher);
+    }
+
+    private void sendEmail(String toEmail, String otp) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Password Reset OTP");
+        message.setText("Your OTP is: " + otp + ". It will expire in 5 minutes.");
+        message.setFrom("smart.attend22526@gmail.com");
+        mailSender.send(message);
     }
 }

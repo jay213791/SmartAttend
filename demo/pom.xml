@@ -46,6 +46,18 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- Spring Boot Mail -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<!-- Spring Boot Security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
 		<!-- ZXing QR code -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>

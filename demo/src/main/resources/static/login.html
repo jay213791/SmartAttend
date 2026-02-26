@@ -43,10 +43,31 @@
                 <span class="close" onclick="closeForgotModal()">&times;</span>
                 <h2>Forget password?</h2>
                 <p>Enter your email to receive an verification code.</p>
-                <input type="email" id="resetEmail" placeholder="Enter Address" required>
-                <button class="forgetBtn" onclick="sendReset()">Send OTP</button>
+                <input type="email" id="ForgotEmail" placeholder="Enter Address" required>
+                <button class="forgetBtn" onclick="forgotPassword()">Send OTP</button>
             </div>
         </div>
+
+        <div class="modal" id="verifyForgotModal">
+            <div class="modal-content">
+                <span class="close" onclick="closeverifyForgotModal()">&times;</span>
+                <h2>Enter OTP</h2>
+                <p>We've sent a 6-digits code to your email.</p>
+                <input type="text" id="otp" placeholder="Enter Code" required>
+                <button class="forgetBtn" onclick="VerifyOtp()">Verify OTP</button>
+            </div>
+        </div>
+
+        <div class="modal" id="changePasswordModal">
+            <div class="modal-content">
+                <span class="close" onclick="closechangeForgotModal()">&times;</span>
+                    <h2>Enter New Password</h2>
+                <p>Enter new password.</p>
+                <input type="text" id="newPassword" placeholder="Enter New Password" required>
+                <button class="forgetBtn" onclick="submitNewPassword()">Submit</button>
+            </div>
+        </div>
+
     </div>
 
 </div>

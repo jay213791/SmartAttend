@@ -1,3 +1,5 @@
+let resetEmail = "";
+
 //log in password eye icon
 function togglePassword() {
     const passwordInput = document.getElementById("password");
@@ -85,4 +87,169 @@ function openForgotModal() {
 
 function closeForgotModal() {
     document.getElementById("forgotModal").style.display = "none";
+}
+
+async function forgotPassword() {
+    const email = document.getElementById("ForgotEmail").value
+
+    if (!email) {
+        Swal.fire({
+            icon: "warning",
+            title: "Enter Email",
+            text: "Please enter email",
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: "Sending OTP...",
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    try {
+        const response = await fetch(`/teacher/forgot-password`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.text();
+
+        Swal.close();
+
+        if (!response.ok) {
+            Swal.fire({
+                icon: "error",
+                title: "Failed to access token",
+                text: data,
+            });
+            return;
+        }
+
+        Swal.fire({
+            icon: "success",
+            title: "OTP sent",
+            text: data,
+            timer: 2000,
+            showConfirmButton: false,
+        }).then(() => {
+            resetEmail = email;
+            document.getElementById("forgotModal").style.display = "none";
+            document.getElementById("verifyForgotModal").style.display = "block";
+        });
+
+    } catch (error) {
+        Swal.close();
+
+        console.error("Login Failed", error);
+        Swal.fire({
+            icon: "error",
+            title: "Server Error",
+            text: "Unable to connect to server",
+        });
+    }
+}
+
+function closeverifyForgotModal() {
+    document.getElementById("verifyForgotModal").style.display = "none";
+}
+
+async function VerifyOtp() {
+    const email = resetEmail;
+    const otp = document.getElementById("otp").value;
+
+    if (!otp) {
+        Swal.fire({
+            icon: "warning",
+            title: "Enter OTP",
+            text: "Please enter the OTP Code",
+        });
+        return;
+    }
+
+    try {
+        const response = await fetch(`/teacher/verify-otp`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email, otp})
+        })
+
+        const data = await response.text();
+
+        if (!response.ok) {
+            Swal.fire({
+                icon: "error",
+                title: "Verify OTP",
+                text: data,
+            });
+            return;
+        }
+
+        Swal.fire({
+            icon: "success",
+            title: "OTP verified",
+            text: data,
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            document.getElementById("verifyForgotModal").style.display = "none";
+            document.getElementById("changePasswordModal").style.display = "block";
+        });
+    } catch (error) {
+        console.error("VerifyOtp", error);
+        Swal.fire({
+            icon: "error",
+            title: "Server Error",
+            text: "Unable to connect to server",
+        });
+    }
+}
+
+async function submitNewPassword(){
+    const email = resetEmail;
+    const newPassword = document.getElementById("newPassword").value;
+
+    if (!newPassword) {
+        Swal.fire({
+            icon: "warning",
+            title: "Enter New Password",
+            text: "Please enter new password",
+        });
+        return;
+    }
+
+    try {
+        const response = await fetch(`/teacher/reset-password`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email, newPassword})
+        })
+
+        const data = await response.text();
+
+        if (!response.ok) {
+            Swal.fire({
+                icon: "error",
+                title: "Error Encountered",
+                text: data,
+            });
+            return;
+        }
+
+        Swal.fire({
+           icon: "success",
+           title: "Password reset successful",
+           text: data,
+        });
+    } catch (error) {
+        console.error("Login Failed", error);
+        Swal.fire({
+           icon: "error",
+           title: "Server Error",
+           text: "Unable to connect to server",
+        });
+    }
 }
