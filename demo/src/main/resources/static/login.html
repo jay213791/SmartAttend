@@ -61,9 +61,23 @@
         <div class="modal" id="changePasswordModal">
             <div class="modal-content">
                 <span class="close" onclick="closechangeForgotModal()">&times;</span>
-                    <h2>Enter New Password</h2>
-                <p>Enter new password.</p>
-                <input type="text" id="newPassword" placeholder="Enter New Password" required>
+                <h2>Set New Password</h2>
+                <p>Create a new password.</p>
+
+               <div class="passwordWrapper">
+                   <input type="password" id="newPassword" placeholder="Enter New Password" required>
+                   <span class="Modal-toggle-password" onclick="newPassToggle()">
+                       <i id="newPassEyeIcon" class="fas fa-eye"></i>
+                   </span>
+               </div>
+
+                <div class="passwordWrapper">
+                    <input type="text" id="confirmNewPassword" placeholder="Confirm New Password" required>
+                    <span class="ConfirmModal-toggle-password" onclick="ConfirmNewPassToggle()">
+                       <i id="ConfirmNewPassEyeIcon" class="fas fa-eye"></i>
+                   </span>
+                </div>
+
                 <button class="forgetBtn" onclick="submitNewPassword()">Submit</button>
             </div>
         </div>

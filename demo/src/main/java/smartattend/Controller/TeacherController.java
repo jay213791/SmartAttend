@@ -1,11 +1,10 @@
 package smartattend.Controller;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import smartattend.Entity.Teacher;
 import smartattend.Repository.TeacherRepository;
@@ -24,6 +23,9 @@ public class TeacherController {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/add")
     public ResponseEntity<?> addTeacher(@RequestBody Teacher teacher) {
         // if null status will be pending so need pa i approve ng admin
@@ -38,6 +40,10 @@ public class TeacherController {
                     .body("Email already exist");
         }
 
+        teacher.setPassword(
+                passwordEncoder.encode(teacher.getPassword())
+        );
+
         Teacher savedTeacher = teacherRepository.save(teacher);
         return ResponseEntity.ok(savedTeacher);
     }
@@ -50,7 +56,7 @@ public class TeacherController {
             return ResponseEntity.badRequest().body("Email not found");
         }
 
-        if (!teacher.getPassword().equals(loginRequest.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), teacher.getPassword())) {
             return ResponseEntity.badRequest().body("Wrong password");
         }
 
@@ -126,7 +132,7 @@ public class TeacherController {
         }
 
         teacher.setPassword(
-                new BCryptPasswordEncoder().encode(newPassword)
+                passwordEncoder.encode(newPassword)
         );
 
         teacher.setResetOtp(null);

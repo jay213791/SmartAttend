@@ -210,7 +210,8 @@ async function VerifyOtp() {
 
 async function submitNewPassword(){
     const email = resetEmail;
-    const newPassword = document.getElementById("newPassword").value;
+    const password = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmNewPassword").value;
 
     if (!newPassword) {
         Swal.fire({
@@ -221,11 +222,20 @@ async function submitNewPassword(){
         return;
     }
 
+    if (confirmPassword !== password) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid Password",
+            text: "Passwords do not match"
+        });
+        return;
+    }
+
     try {
         const response = await fetch(`/teacher/reset-password`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({email, newPassword})
+            body: JSON.stringify({email, password})
         })
 
         const data = await response.text();
@@ -240,9 +250,13 @@ async function submitNewPassword(){
         }
 
         Swal.fire({
-           icon: "success",
-           title: "Password reset successful",
-           text: data,
+            icon: "success",
+            title: "Password reset successful",
+            text: data,
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            document.getElementById("changePasswordModal").style.display = "none";
         });
     } catch (error) {
         console.error("Login Failed", error);
@@ -251,5 +265,35 @@ async function submitNewPassword(){
            title: "Server Error",
            text: "Unable to connect to server",
         });
+    }
+}
+
+function newPassToggle(){
+    const NewPasswordInput = document.getElementById("newPassword");
+    const eyeIcon = document.getElementById("newPassEyeIcon");
+
+    if (NewPasswordInput.type === "password") {
+        NewPasswordInput.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        NewPasswordInput.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+    }
+}
+
+function ConfirmNewPassToggle(){
+    const ConfirmpasswordInput = document.getElementById("confirmNewPassword");
+    const eyeIcon = document.getElementById("ConfirmNewPassEyeIcon");
+
+    if (ConfirmpasswordInput.type === "password") {
+        ConfirmpasswordInput.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        ConfirmpasswordInput.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
     }
 }

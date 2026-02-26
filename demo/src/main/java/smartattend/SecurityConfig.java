@@ -3,6 +3,8 @@ package smartattend;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,11 +30,12 @@ public class SecurityConfig {
                                 "/teacher/reset-password",
                                 "/teacher/login",
                                 "/teacher/add",
-                                "/teacher/approve/{id}"
+                                "/teacher/approve/{id}",
+                                "/teacher/check-email",
+                                "/teacher/delete/{id}"
                         ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(withDefaults()); // fixed deprecation
+                        .anyRequest().permitAll()
+                );
 
         return http.build();
     }
@@ -47,5 +50,10 @@ public class SecurityConfig {
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

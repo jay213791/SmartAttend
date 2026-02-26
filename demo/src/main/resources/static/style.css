@@ -50,7 +50,7 @@ input{
     color: #155c63;
     border: 1px solid #ccc;
     outline: none;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
     box-sizing: border-box;
 }
 
@@ -58,15 +58,34 @@ input{
     padding: 15px 45px 15px 15px;
 }
 
-.password-wrapper, .confirm-pass-wrapper {
+.password-wrapper, .confirm-pass-wrapper, .modal {
     position: relative;
 }
-
 
 .toggle-password {
     position: absolute;
     right: 15px;
     top: 35%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #155c63;
+    font-size: 16px;
+}
+
+.Modal-toggle-password{
+    position: absolute;
+    right: 38px;
+    top: 51%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #155c63;
+    font-size: 16px;
+}
+
+.ConfirmModal-toggle-password{
+    position: absolute;
+    right: 38px;
+    top: 69.5%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #155c63;
@@ -86,7 +105,7 @@ input{
     color: white;
     margin-top: 35px;
     font-size: 17px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
     cursor: pointer;
 }
 
@@ -213,6 +232,13 @@ h2{
     box-shadow: 0 5px 25px rgba(0,0,0,0.70);
 }
 
+.modal p {
+    font-weight: lighter;
+    color: #625757;
+    text-align: center;
+    font-size: 18px;
+}
+
 .close {
     position: absolute;
     top: 12px;
@@ -244,6 +270,7 @@ h2{
 .forgetBtn:hover{
     background: #08a9bc;
 }
+
 
 @media (max-width: 768px) {
     .main-container {
