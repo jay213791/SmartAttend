@@ -25,16 +25,38 @@ public class SecurityConfig {
                 .cors(cors -> {})             // enable CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/body/login.html",
+                                "/body/registration.html",
+                                "/style/**",
+                                "/assets/**",
+                                "/script/**",
+                                "/js/**",
+                                "/teacher/login",
                                 "/teacher/forgot-password",
                                 "/teacher/verify-otp",
-                                "/teacher/reset-password",
-                                "/teacher/login",
-                                "/teacher/add",
-                                "/teacher/approve/{id}",
-                                "/teacher/check-email",
-                                "/teacher/delete/{id}"
+                                "/teacher/reset-password"
                         ).permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(
+                                "/teacher/dashboard/**",
+                                "/students/my-students",
+                                "/students/count/my-students",
+                                "/students/add"
+                        ).hasRole("TEACHER")
+
+                        .requestMatchers(
+                                "/teacher/approve/**",
+                                "/teacher/delete/**"
+                        ).hasRole("ADMIN")
+
+                        .anyRequest().authenticated()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/body/login.html")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                 );
 
         return http.build();
@@ -56,4 +78,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 }

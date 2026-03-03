@@ -26,4 +26,8 @@ public class Student {
 
     @Column(name = "QR_CODE")
     private String qrCode;
+
+    @ManyToOne
+    @JoinColumn(name = "TEACHER_ID",referencedColumnName = "ID", nullable = false)
+    private Teacher teacher;
 }

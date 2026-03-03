@@ -6,8 +6,19 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import smartattend.Entity.Student;
 import smartattend.Entity.Teacher;
+import smartattend.Repository.StudentRepository;
 import smartattend.Repository.TeacherRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +30,9 @@ import java.util.Random;
 public class TeacherController {
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -49,7 +63,7 @@ public class TeacherController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginTeacher(@RequestBody Teacher loginRequest) {
+    public ResponseEntity<?> loginTeacher(@RequestBody Teacher loginRequest,  HttpServletRequest request) {
         Teacher teacher = teacherRepository.findByEmail(loginRequest.getEmail());
 
         if (teacher == null) {
@@ -63,6 +77,16 @@ public class TeacherController {
         if (!teacher.getStatus().equals("approved")) {
             return ResponseEntity.badRequest().body("Account not yet approved");
         }
+
+        // --- SET SPRING SECURITY AUTH PARA ACCESS NG MGA CONTROLLER ---
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                teacher.getEmail(),
+                teacher.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_TEACHER"))
+        );
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        HttpSession session = request.getSession(true);
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
         return ResponseEntity.ok(teacher);
     }
@@ -141,6 +165,12 @@ public class TeacherController {
         teacherRepository.save(teacher);
 
         return ResponseEntity.ok("Password updated");
+    }
+
+    @GetMapping("/students/my-students")
+    public List<Student> getMyStudents(Authentication authentication) {
+        String teacherEmail = authentication.getName();
+        return studentRepository.findByTeacherEmail(teacherEmail);
     }
 
     @GetMapping("/all")

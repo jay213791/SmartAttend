@@ -208,6 +208,10 @@ async function VerifyOtp() {
     }
 }
 
+function closechangeForgotModal() {
+    document.getElementById("changePasswordModal").style.display = "none";
+}
+
 async function submitNewPassword(){
     const email = resetEmail;
     const password = document.getElementById("newPassword").value;
