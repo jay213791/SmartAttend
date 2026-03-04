@@ -66,10 +66,17 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
+
+        // Allow both your local dev frontend and Railway deployment frontend
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:5500")); // frontend URL
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5500", // local dev
+                "https://smartattend-production-c29f.up.railway.app"
+        ));
+
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
