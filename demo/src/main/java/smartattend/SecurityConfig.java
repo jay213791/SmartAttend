@@ -17,55 +17,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+        // Disable all security for deployment testing
         http
-                .csrf(csrf -> csrf.disable()) // disable CSRF for JS fetch
-                .cors(cors -> {})             // enable CORS
-                .authorizeHttpRequests(auth -> auth
-                        // Public routes
-                        .requestMatchers(
-                                "/",
-                                "/status",
-                                "/index.html",
-                                "/body/login.html",
-                                "/body/registration.html",
-                                "/style/**",
-                                "/assets/**",
-                                "/script/**",
-                                "/js/**",
-                                "/teacher/login",
-                                "/teacher/forgot-password",
-                                "/teacher/verify-otp",
-                                "/teacher/reset-password"
-                        ).permitAll()
-
-                        // Teacher-only routes
-                        .requestMatchers(
-                                "/teacher/dashboard/**",
-                                "/students/my-students",
-                                "/students/count/my-students",
-                                "/students/add"
-                        ).hasRole("TEACHER")
-
-                        // Admin-only routes
-                        .requestMatchers(
-                                "/teacher/approve/**",
-                                "/teacher/delete/**"
-                        ).hasRole("ADMIN")
-
-                        // Any other route requires authentication
-                        .anyRequest().authenticated()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/body/login.html")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                );
-
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         return http.build();
     }
-
     // CORS configuration for local dev + Railway frontend
     @Bean
     public CorsFilter corsFilter() {
