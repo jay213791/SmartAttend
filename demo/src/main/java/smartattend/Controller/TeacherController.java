@@ -109,7 +109,14 @@ public class TeacherController {
 
         teacherRepository.save(teacher);
 
-        sendEmail(email, otp);
+        try {
+            sendEmail(email, otp);
+        } catch (Exception error) {
+            System.err.println("Failed to send OTP email: " + error.getMessage());
+            // Optionally return a message to frontend
+            return ResponseEntity.status(200)
+                    .body("OTP generated but failed to send email");
+        }
 
         return ResponseEntity.ok("OTP sent");
     }
