@@ -50,7 +50,7 @@ public class SecurityConfig {
                                 "/teacher/delete/**"
                         ).hasRole("ADMIN")
 
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
