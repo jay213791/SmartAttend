@@ -12,8 +12,6 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 public class SecurityConfig {
 
@@ -24,8 +22,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // disable CSRF for JS fetch
                 .cors(cors -> {})             // enable CORS
                 .authorizeHttpRequests(auth -> auth
+                        // Public routes
                         .requestMatchers(
                                 "/",
+                                "/status",
                                 "/index.html",
                                 "/body/login.html",
                                 "/body/registration.html",
@@ -38,6 +38,8 @@ public class SecurityConfig {
                                 "/teacher/verify-otp",
                                 "/teacher/reset-password"
                         ).permitAll()
+
+                        // Teacher-only routes
                         .requestMatchers(
                                 "/teacher/dashboard/**",
                                 "/students/my-students",
@@ -45,11 +47,13 @@ public class SecurityConfig {
                                 "/students/add"
                         ).hasRole("TEACHER")
 
+                        // Admin-only routes
                         .requestMatchers(
                                 "/teacher/approve/**",
                                 "/teacher/delete/**"
                         ).hasRole("ADMIN")
 
+                        // Any other route requires authentication
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout
@@ -62,21 +66,18 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // CORS configuration for local dev + Railway frontend
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-
-        // Allow both your local dev frontend and Railway deployment frontend
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5500", // local dev
-                "https://smartattend-production-c29f.up.railway.app"
+                "https://smartattend-production-c29f.up.railway.app" // Railway frontend
         ));
-
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
@@ -85,6 +86,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }
