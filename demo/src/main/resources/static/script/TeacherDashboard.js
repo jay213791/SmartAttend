@@ -16,7 +16,7 @@ function closeLogoutModal(){
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-    fetch(`/students/count/my-students`)
+    fetch(`https://smartattend-production-c29f.up.railway.app/students/count/my-students`)
         .then(response => response.json())
         .then(data => {
             document.getElementById("studentCount").innerHTML = data;

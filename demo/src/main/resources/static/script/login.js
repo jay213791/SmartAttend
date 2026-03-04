@@ -111,7 +111,7 @@ async function forgotPassword() {
     });
 
     try {
-        const response = await fetch(`/teacher/forgot-password`, {
+        const response = await fetch(`https://smartattend-production-c29f.up.railway.app/teacher/forgot-password`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ email })
@@ -172,7 +172,7 @@ async function VerifyOtp() {
     }
 
     try {
-        const response = await fetch(`/teacher/verify-otp`, {
+        const response = await fetch(`https://smartattend-production-c29f.up.railway.app/teacher/verify-otp`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ email, otp})
@@ -237,7 +237,7 @@ async function submitNewPassword(){
     }
 
     try {
-        const response = await fetch(`/teacher/reset-password`, {
+        const response = await fetch(`https://smartattend-production-c29f.up.railway.app/teacher/reset-password`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email, password})
