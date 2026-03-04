@@ -15,26 +15,26 @@ import java.util.Arrays;
 @Configuration
 public class SecurityConfig {
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Disable all security for deployment testing
-        http
-                .csrf(csrf -> csrf.disable())
+        // Disable security for deployment
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         return http.build();
     }
-    // CORS configuration for local dev + Railway frontend
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5500", // local dev
+                "http://localhost:5500", // local frontend
                 "https://smartattend-production-c29f.up.railway.app" // Railway frontend
         ));
         config.setAllowedHeaders(Arrays.asList("*"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
