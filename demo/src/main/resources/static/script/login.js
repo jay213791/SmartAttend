@@ -59,7 +59,7 @@ async function loginUser() {
                 timer: 2000,
                 showConfirmButton: false
             }).then(() => {
-                window.location.href = "TeacherDashboard.html";
+                window.location.href = "https://smartattend-production-c29f.up.railway.app/TeacherDashboard.html";
             });
         } else {
             const errorMessage = await response.text();
