@@ -35,7 +35,7 @@ async function loginUser() {
     }
 
     try {
-        const response = await fetch(`/teacher/login`, {
+        const response = await fetch(`https://smartattend-production-c29f.up.railway.app/teacher/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -43,7 +43,8 @@ async function loginUser() {
             body: JSON.stringify({
                 email: email,
                 password: password
-            })
+            }),
+            credentials: "include"
         });
 
         if (response.ok) {
