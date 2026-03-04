@@ -2,6 +2,7 @@ package smartattend;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,11 +19,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Disable security for deployment
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+        http
+                // CSRF disabled for APIs
+                .csrf(csrf -> csrf.disable())
+                // All requests permitted (adjust later for auth)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight
+                        .anyRequest().permitAll()
+                );
         return http.build();
     }
+
 
     @Bean
     public CorsFilter corsFilter() {
