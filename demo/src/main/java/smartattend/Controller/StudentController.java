@@ -56,7 +56,7 @@ public class StudentController {
         Student savedStudent = studentRepository.save(student);
 
         // Generate QR code image tapos i save sa file
-        String qrFilePath = "C:" + File.separator + "Users" + File.separator + "Christian Jay" + File.separator + "Downloads" + File.separator + savedStudent.getStudentNumber() + ".png";
+        String qrFilePath = "/tmp/" + savedStudent.getStudentNumber() + ".png";
 
         try {
             QRCodeGenerator.generateQRCodeImage(savedStudent.getQrCode(), 200, 200, qrFilePath);
