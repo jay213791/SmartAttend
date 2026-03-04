@@ -55,14 +55,14 @@ public class StudentController {
         // save ng student sa database
         Student savedStudent = studentRepository.save(student);
 
-        // Generate QR code image tapos i save sa file
+        /* Generate QR code image tapos i save sa file
         String qrFilePath = "/tmp/" + savedStudent.getStudentNumber() + ".png";
 
         try {
             QRCodeGenerator.generateQRCodeImage(savedStudent.getQrCode(), 200, 200, qrFilePath);
         } catch (Exception e) {
             logger.error("Failed to generate QR code for student: {}", savedStudent.getStudentNumber(), e);
-        }
+        }*/
         return ResponseEntity.ok(savedStudent);
     }
 
