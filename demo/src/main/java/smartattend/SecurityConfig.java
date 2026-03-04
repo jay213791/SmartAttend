@@ -28,14 +28,18 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
+
+        // Allow cookies and credentials
         config.setAllowCredentials(true);
+
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5500", // local frontend
-                "https://smartattend-production-c29f.up.railway.app" // Railway frontend
+                "http://jazzy-ganache-4979e5.netlify.app" // Netlify frontend
         ));
         config.setAllowedHeaders(Arrays.asList("*"));
+
         config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
-        config.setAllowCredentials(true);
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
