@@ -37,6 +37,9 @@ public class Teacher {
     @Column(name = "OTP_EXPIRY")
     private LocalDateTime otpExpiry;
 
+    @Column(name = "PROFILE_PICTURE", columnDefinition = "LONGTEXT")
+    private String profilePicture;
+
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDate.now();

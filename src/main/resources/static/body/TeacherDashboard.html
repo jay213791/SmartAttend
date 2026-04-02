@@ -12,7 +12,11 @@
 
 <div class="MainContainer">
 
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <header class="header">
+        <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+        </button>
         <div class="logo">
             <svg width="81" height="62" viewBox="0 0 81 62" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <rect width="81" height="62" fill="url(#pattern0_295_447)"/>
@@ -24,6 +28,14 @@
                 </defs>
             </svg>
             <span>SmartAttend</span>
+        </div>
+        <div class="header-profile">
+            <label for="profileUpload" class="avatar-wrap" title="Change profile picture">
+                <img id="headerAvatar" src="" alt="" class="avatar-img">
+                <span class="avatar-initials" id="headerInitials"></span>
+                <input type="file" id="profileUpload" accept="image/*" style="display:none" onchange="uploadProfilePicture(this)">
+            </label>
+            <span class="header-name" id="headerName"></span>
         </div>
     </header>
 
@@ -64,7 +76,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#">
+                    <a href="settings.html">
                         <svg width="40" height="45" viewBox="0 0 51 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5.06082 36.3586V34.6705C5.06082 33.7875 5.46577 32.9564 6.09815 32.5668C10.3746 29.9442 15.2584 28.5678 20.2438 28.5678C20.3196 28.5678 20.3705 28.5678 20.4463 28.5939C20.6991 26.7759 21.2053 25.0361 21.9394 23.452C21.3824 23.3994 20.8258 23.3737 20.2439 23.3737C14.1202 23.3737 8.40156 25.1139 3.51742 28.1006C1.29065 29.4508 0 31.9956 0 34.6705V41.5527H23.4322C22.3695 39.9946 21.5346 38.2283 20.9776 36.3586L5.06082 36.3586Z" fill="currentColor"/>
                             <path d="M20.2443 20.7766C25.8364 20.7766 30.3661 16.1281 30.3661 10.3883C30.3661 4.64899 25.8369 0 20.2443 0C14.6518 0 10.1225 4.6485 10.1225 10.3883C10.1225 16.1276 14.6518 20.7766 20.2443 20.7766ZM20.2443 5.19458C23.0276 5.19458 25.3052 7.53219 25.3052 10.3887C25.3052 13.2451 23.0275 15.5827 20.2443 15.5827C17.4611 15.5827 15.1835 13.2451 15.1835 10.3887C15.1835 7.53157 17.4606 5.19458 20.2443 5.19458Z" fill="currentColor"/>
@@ -74,26 +86,9 @@
                     </a>
                 </li>
             </ul>
-            <div class="log-outBtn">
-                <div class="log-outBtn">
-                    <i class="fa-solid fa-right-from-bracket fa-lg" style="color:white"></i>
-                    <p onclick="logoutFunction()">Logout</p>
-                </div>
-            </div>
         </aside>
 
         <main class="dashboard-main">
-
-            <div class="modal" id="LogoutModal">
-                <div class="modal-content">
-                    <h2>Confirm Logout?</h2>
-                    <p>Are you sure you want to log out?</p>
-                    <div class="logout-btn-container">
-                        <button class="LogoutBtn" onclick="LogoutBtn()">Yes</button>
-                        <button class="LogoutBtn" onclick="closeLogoutModal()">No</button>
-                    </div>
-                </div>
-            </div>
 
             <div>
                 <h1>Dashboard</h1>

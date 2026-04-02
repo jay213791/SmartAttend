@@ -1,6 +1,8 @@
 package smartattendLocal.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+import java.util.Base64;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -111,7 +113,7 @@ public class TeacherController {
 
         sendEmail(email, otp);
 
-        return ResponseEntity.ok("OTP sent");
+        return ResponseEntity.ok("OTP sent to " + teacher.getEmail());
     }
 
     @PostMapping("/verify-otp")
@@ -167,6 +169,79 @@ public class TeacherController {
         return ResponseEntity.ok("Password updated");
     }
 
+    @PostMapping("/send-change-password-otp")
+    public ResponseEntity<?> sendChangePasswordOtp(Authentication authentication) {
+        Teacher teacher = teacherRepository.findByEmail(authentication.getName());
+        if (teacher == null) return ResponseEntity.badRequest().body("Not found");
+
+        String otp = String.valueOf(new Random().nextInt(900000) + 100000);
+        teacher.setResetOtp(otp);
+        teacher.setOtpExpiry(LocalDateTime.now().plusMinutes(5));
+        teacherRepository.save(teacher);
+        sendEmail(teacher.getEmail(), otp);
+
+        return ResponseEntity.ok("OTP sent to " + teacher.getEmail());
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody Map<String, String> body, Authentication authentication) {
+        Teacher teacher = teacherRepository.findByEmail(authentication.getName());
+        if (teacher == null) return ResponseEntity.badRequest().body("Not found");
+
+        String newName = body.get("name");
+        String currentPassword = body.get("currentPassword");
+        String newPassword = body.get("newPassword");
+
+        if (newName != null && !newName.isBlank()) teacher.setName(newName);
+
+        if (newPassword != null && !newPassword.isBlank()) {
+            if (currentPassword == null || !passwordEncoder.matches(currentPassword, teacher.getPassword())) {
+                return ResponseEntity.badRequest().body("Current password is incorrect");
+            }
+            teacher.setPassword(passwordEncoder.encode(newPassword));
+        }
+
+        teacherRepository.save(teacher);
+        Map<String, Object> result = new java.util.LinkedHashMap<>();
+        result.put("name", teacher.getName());
+        result.put("email", teacher.getEmail());
+        result.put("profilePicture", teacher.getProfilePicture());
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getMe(Authentication authentication) {
+        Teacher teacher = teacherRepository.findByEmail(authentication.getName());
+        if (teacher == null) return ResponseEntity.badRequest().body("Not found");
+        Map<String, Object> result = new java.util.LinkedHashMap<>();
+        result.put("name", teacher.getName());
+        result.put("email", teacher.getEmail());
+        result.put("profilePicture", teacher.getProfilePicture());
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/profile-picture")
+    public ResponseEntity<?> deleteProfilePicture(Authentication authentication) {
+        Teacher teacher = teacherRepository.findByEmail(authentication.getName());
+        if (teacher == null) return ResponseEntity.badRequest().body("Not found");
+        teacher.setProfilePicture(null);
+        teacherRepository.save(teacher);
+        return ResponseEntity.ok("Deleted");
+    }
+
+    @PostMapping("/profile-picture")
+    public ResponseEntity<?> uploadProfilePicture(@RequestParam("file") MultipartFile file, Authentication authentication) {
+        try {
+            String base64 = "data:" + file.getContentType() + ";base64," + Base64.getEncoder().encodeToString(file.getBytes());
+            Teacher teacher = teacherRepository.findByEmail(authentication.getName());
+            teacher.setProfilePicture(base64);
+            teacherRepository.save(teacher);
+            return ResponseEntity.ok(base64);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Upload failed");
+        }
+    }
+
     @GetMapping("/students/my-students")
     public List<Student> getMyStudents(Authentication authentication) {
         String teacherEmail = authentication.getName();
@@ -186,20 +261,6 @@ public class TeacherController {
                     .body("Email already exist");
         }
         return ResponseEntity.ok("Email available");
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public String deleteTeacher(@PathVariable int id){
-        teacherRepository.deleteById(id);
-        return "Teacher with ID " + id + " has been deleted";
-    }
-
-    //approval control
-    @PutMapping("/approve/{id}")
-    public Teacher approveTeacher(@PathVariable int id){
-        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Teacher not found"));
-        teacher.setStatus("approved");
-        return teacherRepository.save(teacher);
     }
 
     private void sendEmail(String toEmail, String otp) {

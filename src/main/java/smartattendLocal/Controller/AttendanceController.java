@@ -235,7 +235,11 @@ public class AttendanceController {
         String teacherEmail = authentication.getName();
         List<Card> cards = cardsRepository.findByTeacher_Email(teacherEmail);
 
-        // totalStudents = ALL enrolled students across ALL teacher's cards, regardless of schedule
+        LocalDate today = LocalDate.now();
+        String todayAbbr = today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+        LocalTime nowTime = LocalTime.now();
+
+        // totalStudents = ALL students across ALL teacher's cards
         long totalStudents = 0;
         Set<Integer> allCardIds = new HashSet<>();
         for (Card c : cards) {
@@ -243,19 +247,27 @@ public class AttendanceController {
             totalStudents += studentRepository.findByCardId(c.getId()).size();
         }
 
-        // present/late/absent only from today's scans across all teacher's cards
-        LocalDate today = LocalDate.now();
+        // only today's scheduled cards for absent calculation
+        List<Card> todayCards = new ArrayList<>();
+        for (Card c : cards) {
+            if (c.getClassDays() == null || c.getClassDays().isEmpty()) continue;
+            if (Arrays.asList(c.getClassDays().split(",")).contains(todayAbbr)) todayCards.add(c);
+        }
+        Set<Integer> todayCardIds = new HashSet<>();
+        for (Card c : todayCards) todayCardIds.add(c.getId());
+
         List<Attendance> records = attendanceRepository.findByScanTimeBetween(
                 today.atStartOfDay(), today.atTime(23, 59, 59));
 
-        long present = 0, late = 0;
+        Map<Integer, long[]> scansByCard = new HashMap<>();
         List<Map<String, Object>> recentList = new ArrayList<>();
-
         for (Attendance a : records) {
             if (!allCardIds.contains(a.getCard().getId())) continue;
-            if ("Present".equals(a.getStatus())) present++;
-            else if ("Late".equals(a.getStatus())) late++;
-
+            if (todayCardIds.contains(a.getCard().getId())) {
+                long[] counts = scansByCard.computeIfAbsent(a.getCard().getId(), k -> new long[2]);
+                if ("Present".equals(a.getStatus())) counts[0]++;
+                else if ("Late".equals(a.getStatus())) counts[1]++;
+            }
             Student s = studentRepository.findById(a.getStudentId()).orElse(null);
             if (s != null) {
                 Map<String, Object> row = new LinkedHashMap<>();
@@ -267,7 +279,18 @@ public class AttendanceController {
             }
         }
 
-        long absent = Math.max(totalStudents - present - late, 0);
+        // present/late from today's scheduled cards, absent only after class ends
+        long present = 0, late = 0, absent = 0;
+        for (Card c : todayCards) {
+            long[] counts = scansByCard.getOrDefault(c.getId(), new long[2]);
+            present += counts[0];
+            late    += counts[1];
+            boolean classEnded = c.getEndTime() == null || nowTime.isAfter(c.getEndTime());
+            if (classEnded) {
+                long total = studentRepository.findByCardId(c.getId()).size();
+                absent += Math.max(total - counts[0] - counts[1], 0);
+            }
+        }
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("totalStudents", totalStudents);

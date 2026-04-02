@@ -3,10 +3,13 @@ package smartattendLocal.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import smartattendLocal.Entity.Card;
 import smartattendLocal.Entity.Teacher;
+import smartattendLocal.Repository.AttendanceRepository;
 import smartattendLocal.Repository.CardsRepository;
+import smartattendLocal.Repository.StudentRepository;
 import smartattendLocal.Repository.TeacherRepository;
 
 import java.util.List;
@@ -20,6 +23,12 @@ public class CardController {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private AttendanceRepository attendanceRepository;
 
     @PostMapping("/add")
     public ResponseEntity<?> addCard(@RequestBody Card card, Authentication authentication) {
@@ -108,17 +117,22 @@ public class CardController {
         return ResponseEntity.ok(cards);
     }
 
+    @Transactional
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCard(@PathVariable int id, Authentication authentication) {
         String teacherEmail = authentication.getName();
         Teacher teacher = teacherRepository.findByEmail(teacherEmail);
-        if (teacher == null) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Teacher not found");
-        }
+        if (teacher == null) return ResponseEntity.badRequest().body("Teacher not found");
+
+        Card card = cardsRepository.findById(id).orElse(null);
+        if (card == null) return ResponseEntity.badRequest().body("Card not found");
+
+        // delete child records first to avoid FK constraint violation
+        attendanceRepository.deleteByCardId(id);
+        studentRepository.deleteByCardId(id);
         cardsRepository.deleteById(id);
-        return ResponseEntity.ok("Card with ID " + id + " has been deleted");
+
+        return ResponseEntity.ok("Card deleted");
     }
 
     @PutMapping("/{id}")

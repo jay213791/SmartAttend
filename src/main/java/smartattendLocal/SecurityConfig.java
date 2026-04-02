@@ -29,6 +29,8 @@ public class SecurityConfig {
                                 "/index.html",
                                 "/body/login.html",
                                 "/body/registration.html",
+                                "/body/adminLogin.html",
+                                "/body/adminDashboard.html",
                                 "/style/**",
                                 "/assets/**",
                                 "/script/**",
@@ -39,7 +41,8 @@ public class SecurityConfig {
                                 "/teacher/verify-otp",
                                 "/teacher/reset-password",
                                 "/teacher/add",
-                                "/students/all"
+                                "/students/all",
+                                "/admin/login"
                         ).permitAll()
 
                         // Teacher-only routes
@@ -54,9 +57,8 @@ public class SecurityConfig {
 
                         // Admin-only routes
                         .requestMatchers(
-                                "/teacher/approve/**",
-                                "/teacher/delete/**"
-                        ).hasRole("ADMIN")
+                                "/admin/**"
+                        ).hasAnyRole("ADMIN")
 
                         // Any other route requires authentication
                         .anyRequest().authenticated()

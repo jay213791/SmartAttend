@@ -46,11 +46,12 @@
                 </div>
 
                 <div class="filter-search">
-                    <div class="sendbtn">
-                        <button class="send-btn" onclick="OpenScanner()">Scanner</button>
-                        <button class="send-btn" onclick="sendTheQrToAllStudents()">Send QR to all</button>
-                    </div>
-
+                    <button class="send-btn" onclick="sendTheQrToAllStudents()">
+                        <i class="fa-solid fa-paper-plane"></i> Send QR to all
+                    </button>
+                    <button class="send-btn" onclick="OpenScanner()">
+                        <i class="fa-solid fa-qrcode"></i> Scanner
+                    </button>
 
                     <div class="search-group">
                         <input type="text" id="searchInput" placeholder="Search">

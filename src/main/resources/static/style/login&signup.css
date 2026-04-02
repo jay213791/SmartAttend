@@ -245,6 +245,7 @@ h2 {
     box-sizing: border-box;
 }
 
+
 .modal-content input:focus {
     border-color: #0F6577;
     box-shadow: 0 0 8px rgba(15, 101, 119, 0.4);

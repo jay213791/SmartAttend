@@ -2,6 +2,7 @@ package smartattendLocal.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import smartattendLocal.Entity.Attendance;
 
 import java.time.LocalDateTime;
@@ -28,4 +29,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
             LocalDateTime start,
             LocalDateTime end
     );
+
+    @Transactional
+    void deleteByCardId(int cardId);
 }

@@ -1,3 +1,47 @@
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const btn = document.getElementById('hamburgerBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('open');
+    btn.classList.toggle('open');
+    overlay.classList.toggle('active');
+}
+
+function loadProfile() {
+    fetch('/teacher/me')
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('headerName').textContent = data.name || '';
+            const img = document.getElementById('headerAvatar');
+            const initials = document.getElementById('headerInitials');
+            if (data.profilePicture) {
+                img.src = data.profilePicture;
+                img.style.display = 'block';
+                initials.style.display = 'none';
+            } else {
+                img.style.display = 'none';
+                initials.style.display = 'block';
+                initials.textContent = (data.name || '?').charAt(0);
+            }
+        });
+}
+
+function uploadProfilePicture(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const form = new FormData();
+    form.append('file', file);
+    fetch('/teacher/profile-picture', { method: 'POST', body: form })
+        .then(r => r.text())
+        .then(base64 => {
+            const img = document.getElementById('headerAvatar');
+            const initials = document.getElementById('headerInitials');
+            img.src = base64;
+            img.style.display = 'block';
+            initials.style.display = 'none';
+        });
+}
+
 let reportData = [];
 
 function formatTime(isoString) {
@@ -115,4 +159,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // auto-load today's report
     loadReport();
+    loadProfile();
 });

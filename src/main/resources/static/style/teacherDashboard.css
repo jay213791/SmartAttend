@@ -126,7 +126,7 @@ body {
 
 .stats-card {
     position: relative;
-    background: #0F6577;
+    background: linear-gradient(135deg, #0F6577 0%, #0893A7 100%);
     color: #ffffff;
     border-radius: 16px;
     padding: 16px 18px;
@@ -298,6 +298,12 @@ body {
     color: #1e293b;
 }
 
+.schedule-section {
+    font-size: 11px;
+    color: #0F6577;
+    font-weight: 500;
+}
+
 .schedule-time {
     font-size: 11px;
     color: #64748b;
@@ -326,57 +332,51 @@ body {
 }
 
 /* ── Modal ── */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    left: 0;
-    right: 0;
-    top: 0;
+
+.header-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar-wrap {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.6);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.2);
+}
+
+.avatar-wrap:hover { border-color: #ffffff; }
+
+.avatar-img {
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    overflow-y: auto;
+    object-fit: cover;
+    display: none;
+    border-radius: 50%;
 }
 
-.modal-content {
-    position: relative;
-    background: white;
-    padding: 24px 20px;
-    width: 90%;
-    max-width: 380px;
-    border-radius: 14px;
-    margin: 40px auto;
-    text-align: center;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.70);
-    box-sizing: border-box;
+.avatar-initials {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    pointer-events: none;
 }
 
-.modal p {
-    font-weight: lighter;
-    color: #625757;
-    text-align: center;
-    font-size: 16px;
-}
-
-.logout-btn-container {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-}
-
-.LogoutBtn {
-    width: 100%;
-    padding: 13px 18px;
-    border-radius: 25px;
-    border: none;
-    background: #1F7F8A;
-    color: white;
-    margin-top: 2px;
-    font-size: 16px;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+.header-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
 }
 
 /* ── Hamburger button (hidden on desktop) ── */
@@ -441,7 +441,7 @@ body {
         width: 240px;
         height: 100vh;
         z-index: 1000;
-        padding: 24px 18px 32px;
+        padding: 80px 18px 32px;
         box-sizing: border-box;
         transition: left 0.3s ease;
         flex-direction: column;

@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #0b1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.main-container {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Left Panel ── */
+.left-container {
+    flex: 1;
+    background: linear-gradient(160deg, #0d2137 0%, #0F6577 60%, #0893A7 100%);
+    padding: 50px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* subtle grid pattern overlay */
+.left-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+.left-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+}
+
+.lock-icon-wrap {
+    width: 90px; height: 90px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 40px;
+    backdrop-filter: blur(4px);
+}
+
+.left-content h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    letter-spacing: 0.5px;
+}
+
+.tagline {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #7dd3e8;
+    margin: 0 0 20px;
+}
+
+.divider {
+    width: 50px; height: 2px;
+    background: rgba(255,255,255,0.25);
+    margin: 0 auto 20px;
+    border-radius: 2px;
+}
+
+.description {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    max-width: 240px;
+    margin: 0 auto 28px;
+}
+
+.security-badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.security-badges span {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+}
+
+/* ── Right Panel ── */
+.right-container {
+    flex: 1;
+    background: #0f1e30;
+    padding: 50px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.form-icon {
+    font-size: 32px;
+    color: #0893A7;
+    margin-bottom: 12px;
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 6px;
+}
+
+.form-sub {
+    font-size: 12px;
+    color: #5a7a8a;
+    margin: 0;
+}
+
+/* ── Inputs ── */
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5a8a9a;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 7px;
+}
+
+.input-wrap {
+    display: flex; align-items: center;
+    background: #162333;
+    border: 1.5px solid #1e3347;
+    border-radius: 12px;
+    padding: 0 14px; gap: 10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrap:focus-within {
+    border-color: #0893A7;
+    box-shadow: 0 0 0 3px rgba(8, 147, 167, 0.15);
+}
+
+.input-wrap > i {
+    color: #2a5060;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.input-wrap input {
+    flex: 1; border: none;
+    background: transparent;
+    padding: 13px 0;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    color: #cde8f0;
+    outline: none;
+}
+
+.input-wrap input::placeholder { color: #2a4a5a; }
+
+.toggle-password {
+    cursor: pointer;
+    color: #2a5060;
+    font-size: 14px;
+    padding: 4px;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+.toggle-password:hover { color: #0893A7; }
+
+/* ── Button ── */
+#adminLoginForm button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #0F6577, #0893A7);
+    color: #fff;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 8px 24px rgba(8, 147, 167, 0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    letter-spacing: 0.03em;
+}
+
+#adminLoginForm button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(8, 147, 167, 0.45);
+}
+
+/* ── Warning note ── */
+.warning-note {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 11px;
+    color: #2a4a5a;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+
+.warning-note i { color: #d97706; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    body { align-items: flex-start; padding: 16px; }
+
+    .main-container { flex-direction: column; max-width: 100%; }
+
+    .left-container { padding: 40px 28px; }
+    .right-container { padding: 36px 28px; }
+
+    .lock-icon-wrap { width: 70px; height: 70px; font-size: 30px; }
+    .left-content h1 { font-size: 22px; }
+}
+
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .left-container { padding: 32px 20px; }
+    .right-container { padding: 28px 20px; }
+    h2 { font-size: 18px; }
+    .security-badges { gap: 6px; }
+}

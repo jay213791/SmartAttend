@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script>
+        if (sessionStorage.getItem('adminGate') !== 'granted') {
+            window.location.replace('/body/login.html');
+        }
+        sessionStorage.removeItem('adminGate');
+    </script>
+    <link rel="stylesheet" href="../style/adminDashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" sizes="50x50" href="../assets/SmartAttend-LOGO.jpg">
+</head>
+<body>
+<div class="MainContainer">
+
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <span>SmartAttend <span class="admin-tag">Admin</span></span>
+        </div>
+        <div class="header-right">
+            <span class="admin-name" id="adminName"></span>
+            <button class="logout-btn" onclick="logoutAdmin()">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <div class="dashboard-body">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <button class="nav-btn active" onclick="showTab('all')">
+                    <i class="fa-solid fa-users"></i> All Teachers
+                </button>
+                <button class="nav-btn" onclick="showTab('pending')">
+                    <i class="fa-solid fa-clock"></i> Pending
+                    <span class="badge" id="pendingBadge">0</span>
+                </button>
+                <button class="nav-btn" onclick="showTab('approved')">
+                    <i class="fa-solid fa-circle-check"></i> Approved
+                </button>
+                <button class="nav-btn" onclick="showTab('banned')">
+                    <i class="fa-solid fa-ban"></i> Banned
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="main-content">
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <i class="fa-solid fa-users"></i>
+                    <div>
+                        <span class="stat-value" id="statTotal">0</span>
+                        <span class="stat-label">Total Teachers</span>
+                    </div>
+                </div>
+                <div class="stat-card pending">
+                    <i class="fa-solid fa-clock"></i>
+                    <div>
+                        <span class="stat-value" id="statPending">0</span>
+                        <span class="stat-label">Pending Approval</span>
+                    </div>
+                </div>
+                <div class="stat-card approved">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <div>
+                        <span class="stat-value" id="statApproved">0</span>
+                        <span class="stat-label">Approved</span>
+                    </div>
+                </div>
+                <div class="stat-card banned">
+                    <i class="fa-solid fa-ban"></i>
+                    <div>
+                        <span class="stat-value" id="statBanned">0</span>
+                        <span class="stat-label">Banned</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h2 id="tableTitle">All Teachers</h2>
+                    <div class="search-wrap">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" placeholder="Search by name or email..." oninput="renderTable()">
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Teacher</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacherTableBody"></tbody>
+                    </table>
+                    <div class="empty-state" id="emptyState" style="display:none">
+                        <i class="fa-solid fa-inbox"></i>
+                        <p>No teachers found</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="../script/adminDashboard.js"></script>
+</body>
+</html>

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Report</title>
-    <link rel="stylesheet" href="../style/teacherDashboard.css">
-    <link rel="stylesheet" href="../style/report.css">
+    <title>Settings</title>
+    <link rel="stylesheet" href="../style/settings.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" type="image/png" sizes="50x50" href="../assets/SmartAttend-LOGO.jpg">
 </head>
 <body>
@@ -30,16 +30,17 @@
             <span>SmartAttend</span>
         </div>
         <div class="header-profile">
-            <label for="profileUpload" class="avatar-wrap" title="Change profile picture">
+            <label for="headerUpload" class="avatar-wrap" title="Change profile picture">
                 <img id="headerAvatar" src="" alt="" class="avatar-img">
                 <span class="avatar-initials" id="headerInitials"></span>
-                <input type="file" id="profileUpload" accept="image/*" style="display:none" onchange="uploadProfilePicture(this)">
+                <input type="file" id="headerUpload" accept="image/*" style="display:none" onchange="uploadProfilePicture(this)">
             </label>
             <span class="header-name" id="headerName"></span>
         </div>
     </header>
+
     <div class="dashboardBody">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <ul>
                 <li class="nav-item">
                     <a href="TeacherDashboard.html">
@@ -55,7 +56,6 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-
                 <li class="nav-item">
                     <a href="studenNav.html">
                         <svg width="40" height="62" viewBox="0 0 64 62" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -64,8 +64,7 @@
                         <span>Students</span>
                     </a>
                 </li>
-
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a href="report.html">
                         <svg width="40" height="48" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M54.7259 27.0211H41.1524V3.51644C41.1511 2.5841 40.7476 1.69068 40.031 1.03122C39.3138 0.372238 38.3423 0.00116139 37.3285 0H3.82386C2.81001 0.00116317 1.83784 0.372238 1.12138 1.03122C0.404782 1.69078 0.00126292 2.5842 0 3.51644V44.4836C0.00126503 45.4159 0.404782 46.3099 1.12138 46.9688C1.83797 47.6283 2.81013 47.9988 3.82386 48H39.877C44.1519 47.9953 48.2497 46.4326 51.2723 43.653C54.2949 40.8734 55.995 37.105 56 33.1745V28.1929C56 27.8823 55.8659 27.5839 55.6268 27.3641C55.3878 27.1442 55.0633 27.0209 54.7256 27.0209L54.7259 27.0211ZM2.54942 44.4836V3.51644C2.55005 2.86908 3.1199 2.34505 3.82385 2.34446H37.3285C38.0325 2.34505 38.6023 2.86908 38.6029 3.51644C38.5751 13.7396 38.6232 35.5826 38.6029 45.6554H3.82403C3.12008 45.6554 2.55022 45.1308 2.54959 44.4834L2.54942 44.4836ZM53.4516 33.1745H53.451C53.4472 36.2809 52.1848 39.2746 49.9111 41.5719C47.6373 43.8688 44.5148 45.3053 41.1526 45.6009V29.3653H53.4516L53.4516 33.1745ZM18.6598 35.0357C21.3346 35.0345 23.8991 34.0574 25.7915 32.3195C27.684 30.581 28.7497 28.2237 28.7541 25.7641C28.7547 25.4535 28.62 25.1552 28.3809 24.9353C28.1418 24.7154 27.818 24.5921 27.4796 24.5921H19.9342V17.6533C19.9342 17.3427 19.8001 17.0444 19.561 16.8245C19.3219 16.6046 18.9975 16.4813 18.6597 16.4813C5.30822 16.9478 5.30061 34.5722 18.6597 35.0352L18.6598 35.0357ZM17.3853 18.9252V25.7646H17.3847C17.3847 26.0757 17.5188 26.3741 17.7579 26.594C17.9969 26.8138 18.3214 26.9371 18.6598 26.9371H26.0971C24.373 35.1752 11.3384 34.2324 11.1271 25.7651L11.1264 25.7646C11.1277 24.1297 11.7558 22.5477 12.9005 21.2965C14.0453 20.0454 15.6335 19.2056 17.3847 18.9252H17.3853ZM21.2092 14.1373V22.2481H21.2086C21.2086 22.5593 21.3427 22.8576 21.5818 23.0775C21.8208 23.2973 22.1453 23.4206 22.483 23.4206H31.3036C31.6413 23.4206 31.9657 23.2973 32.2048 23.0775C32.4439 22.8576 32.578 22.5593 32.578 22.2481C32.5748 19.7873 31.5104 17.4276 29.6181 15.6875C27.7258 13.9473 25.1598 12.9683 22.4832 12.9655C22.1455 12.9655 21.821 13.0888 21.5819 13.3087C21.3428 13.5285 21.2088 13.8269 21.2088 14.1375L21.2092 14.1373ZM23.7581 15.4093C25.2956 15.6536 26.713 16.3294 27.8159 17.3444C28.9196 18.3587 29.6544 19.6627 29.9201 21.076H23.7574L23.7581 15.4093ZM14.1142 7.14041H26.8598C27.5543 7.15262 28.1096 7.67375 28.1096 8.31238C28.1096 8.95101 27.5543 9.47214 26.8598 9.48435H14.1142C13.4204 9.47155 12.8651 8.95043 12.8651 8.31238C12.8651 7.67433 13.4204 7.1532 14.1142 7.14041ZM33.1924 42.3036H7.66034C6.96588 42.2908 6.41057 41.7697 6.41057 41.1316C6.41057 40.493 6.96588 39.9718 7.6597 39.9591H33.1918C33.8862 39.9713 34.4428 40.4924 34.4428 41.1316C34.4428 41.7702 33.8862 42.2914 33.1918 42.3036H33.1924Z" fill="currentColor"/>
@@ -73,8 +72,7 @@
                         <span>Reports</span>
                     </a>
                 </li>
-
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a href="settings.html">
                         <svg width="40" height="45" viewBox="0 0 51 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5.06082 36.3586V34.6705C5.06082 33.7875 5.46577 32.9564 6.09815 32.5668C10.3746 29.9442 15.2584 28.5678 20.2438 28.5678C20.3196 28.5678 20.3705 28.5678 20.4463 28.5939C20.6991 26.7759 21.2053 25.0361 21.9394 23.452C21.3824 23.3994 20.8258 23.3737 20.2439 23.3737C14.1202 23.3737 8.40156 25.1139 3.51742 28.1006C1.29065 29.4508 0 31.9956 0 34.6705V41.5527H23.4322C22.3695 39.9946 21.5346 38.2283 20.9776 36.3586L5.06082 36.3586Z" fill="currentColor"/>
@@ -88,76 +86,138 @@
         </aside>
 
         <main class="dashboard-main">
-
-            <div class="report-header">
-                <h1>Attendance Report</h1>
+            <div class="page-title-row">
+                <h1>Settings</h1>
             </div>
 
-            <section class="report-filters card">
-                <div class="filter-group">
-                    <label for="classFilter">Class</label>
-                    <select id="classFilter">
-                        <option value="">All Classes</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="dateFilter">Date</label>
-                    <input type="date" id="dateFilter">
-                </div>
-                <button class="filter-btn" onclick="loadReport()">
-                    <i class="fa-solid fa-magnifying-glass"></i> View
-                </button>
-                <button class="download-btn" onclick="downloadCSV()">
-                    <i class="fa-solid fa-download"></i> Download CSV
-                </button>
-            </section>
+            <div class="settings-layout">
 
-            <section class="report-summary card" id="summarySection" style="display:none">
-                <div class="summary-item present">
-                    <span class="summary-count" id="sumPresent">0</span>
-                    <span class="summary-label">Present</span>
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-avatar-wrap">
+                        <label for="avatarUpload" class="profile-avatar-label" title="Change photo">
+                            <img id="profileAvatar" src="" alt="" class="profile-avatar-img">
+                            <span class="profile-avatar-initials" id="profileInitials"></span>
+                            <div class="avatar-overlay"><i class="fa-solid fa-camera"></i></div>
+                            <input type="file" id="avatarUpload" accept="image/*" style="display:none" onchange="uploadProfilePicture(this)">
+                        </label>
+                        <button class="delete-avatar-btn" id="deleteAvatarBtn" onclick="deleteProfilePicture()" title="Remove photo" style="display:none">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <span class="profile-name" id="profileName">—</span>
+                        <span class="profile-email" id="profileEmail">—</span>
+                        <span class="profile-badge"><i class="fa-solid fa-circle-check"></i> Teacher Account</span>
+                    </div>
                 </div>
-                <div class="summary-item late">
-                    <span class="summary-count" id="sumLate">0</span>
-                    <span class="summary-label">Late</span>
-                </div>
-                <div class="summary-item absent">
-                    <span class="summary-count" id="sumAbsent">0</span>
-                    <span class="summary-label">Absent</span>
-                </div>
-                <div class="summary-item total">
-                    <span class="summary-count" id="sumTotal">0</span>
-                    <span class="summary-label">Total</span>
-                </div>
-            </section>
 
-            <section class="card report-table-card">
-                <div class="card-header">
-                    <h2 id="reportTitle">Select a date and class to view report</h2>
-                    <span id="reportSubtitle"></span>
-                </div>
-                <div class="table-scroll">
-                    <table class="report-table">
-                        <thead>
-                            <tr>
-                                <th>Class</th>
-                                <th>Student Name</th>
-                                <th>Student No.</th>
-                                <th>Email</th>
-                                <th>Time In</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reportTableBody">
-                            <tr><td colspan="6" class="empty-msg">Use the filters above to load a report.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                <!-- Settings Panels -->
+                <div class="settings-panels">
 
+                    <!-- Personal Info -->
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fa-solid fa-user section-icon"></i>
+                            <div>
+                                <h2>Personal Information</h2>
+                                <p>Update your display name</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="nameInput" placeholder="Enter your new username">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <div class="input-wrap disabled">
+                                <i class="fa-solid fa-envelope"></i>
+                                <input type="email" id="emailInput" placeholder="Email" disabled>
+                            </div>
+                            <span class="field-note">Email cannot be changed</span>
+                        </div>
+                        <button class="save-btn" onclick="saveName()">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                        </button>
+                    </div>
+
+                    <!-- Change Password -->
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fa-solid fa-lock section-icon"></i>
+                            <div>
+                                <h2>Change Password</h2>
+                                <p>Keep your account secure</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="currentPassword" placeholder="Enter current password">
+                                <button type="button" class="eye-btn" onclick="togglePw('currentPassword', this)"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-key"></i>
+                                <input type="password" id="newPassword" placeholder="Enter new password">
+                                <button type="button" class="eye-btn" onclick="togglePw('newPassword', this)"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm New Password</label>
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-key"></i>
+                                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                <button type="button" class="eye-btn" onclick="togglePw('confirmPassword', this)"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <button class="save-btn" onclick="savePassword()">
+                            <i class="fa-solid fa-shield-halved"></i> Update Password
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Logout Section -->
+                <div class="logout-section">
+                    <div class="logout-card">
+                        <div class="logout-info">
+                            <i class="fa-solid fa-right-from-bracket logout-icon"></i>
+                            <div>
+                                <h3>Sign Out</h3>
+                                <p>You will be logged out of your account</p>
+                            </div>
+                        </div>
+                        <button class="logout-btn-settings" onclick="logoutFunction()">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+
+            </div>
         </main>
     </div>
+
+    <!-- Logout Modal -->
+    <div class="modal" id="LogoutModal">
+        <div class="modal-content">
+            <h2>Confirm Logout?</h2>
+            <p>Are you sure you want to log out?</p>
+            <div class="logout-btn-container">
+                <button class="LogoutBtn" onclick="LogoutBtn()">Yes</button>
+                <button class="LogoutBtn secondary" onclick="closeLogoutModal()">No</button>
+            </div>
+        </div>
+    </div>
+
 </div>
-<script src="../script/report.js"></script>
+
+<script src="../script/settings.js"></script>
 </body>
 </html>

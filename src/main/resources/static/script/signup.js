@@ -75,6 +75,16 @@ async function validateRegister() {
         return;
     }
 
+   /* if (name.length > 5) {
+        Swal.fire({
+            icon: "warning",
+            title: "Username Characters limits",
+            text: "Username should not exceed 10 character",
+        });
+        return;
+    }
+    */
+
     if (!isValidEmail(email)) {
         Swal.fire({
             icon: "error",

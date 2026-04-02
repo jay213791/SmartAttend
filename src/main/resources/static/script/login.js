@@ -18,6 +18,11 @@ function togglePassword() {
 
 document.getElementById("loginForm").addEventListener("submit", function (e){
     e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    if (email === 'open@admin') {
+        openAdminPasscode();
+        return;
+    }
     loginUser();
 });
 
@@ -134,17 +139,45 @@ async function forgotPassword() {
             return;
         }
 
+        resetEmail = email;
+        document.getElementById("forgotModal").style.display = "none";
+        form.reset();
+
+        const otpResult = await Swal.fire({
+            title: '<i class="fa-solid fa-envelope" style="color:#0F6577"></i> Verify Your Identity',
+            html: `<p style="font-size:13px;color:#64748b;margin:0 0 16px">${data}</p>
+                   <input id="swal-otp" class="swal2-input" placeholder="Enter 6-digit OTP" maxlength="6" style="letter-spacing:6px;font-size:18px;text-align:center">`,
+            showCancelButton: true,
+            confirmButtonText: 'Verify',
+            confirmButtonColor: '#0F6577',
+            focusConfirm: false,
+            preConfirm: () => {
+                const val = document.getElementById('swal-otp').value.trim();
+                if (!val || val.length !== 6) { Swal.showValidationMessage('Please enter the 6-digit OTP'); return false; }
+                return val;
+            }
+        });
+
+        if (!otpResult.isConfirmed) return;
+
+        const verifyRes = await fetch(`/teacher/verify-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: resetEmail, otp: otpResult.value })
+        });
+
+        const verifyData = await verifyRes.text();
+
+        if (!verifyRes.ok) {
+            Swal.fire({ icon: 'error', title: 'Verify OTP', text: verifyData });
+            return;
+        }
+
         Swal.fire({
-            icon: "success",
-            title: "OTP sent",
-            text: data,
-            timer: 2000,
-            showConfirmButton: false,
+            icon: 'success', title: 'OTP Verified', text: verifyData,
+            timer: 2000, showConfirmButton: false
         }).then(() => {
-            resetEmail = email;
-            document.getElementById("forgotModal").style.display = "none";
-            document.getElementById("verifyForgotModal").style.display = "block";
-            form.reset();
+            document.getElementById('changePasswordModal').style.display = 'block';
         });
 
     } catch (error) {
@@ -161,59 +194,6 @@ async function forgotPassword() {
 
 function closeverifyForgotModal() {
     document.getElementById("verifyForgotModal").style.display = "none";
-}
-
-async function VerifyOtp() {
-    const email = resetEmail;
-    const otp = document.getElementById("otp").value;
-    const form = document.getElementById("OtpForm");
-
-    if (!otp) {
-        Swal.fire({
-            icon: "warning",
-            title: "Enter OTP",
-            text: "Please enter the OTP Code",
-        });
-        return;
-    }
-
-    try {
-        const response = await fetch(`/teacher/verify-otp`, {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ email, otp})
-        })
-
-        const data = await response.text();
-
-        if (!response.ok) {
-            Swal.fire({
-                icon: "error",
-                title: "Verify OTP",
-                text: data,
-            });
-            return;
-        }
-
-        Swal.fire({
-            icon: "success",
-            title: "OTP verified",
-            text: data,
-            timer: 2000,
-            showConfirmButton: false
-        }).then(() => {
-            document.getElementById("verifyForgotModal").style.display = "none";
-            document.getElementById("changePasswordModal").style.display = "block";
-            form.reset();
-        });
-    } catch (error) {
-        console.error("VerifyOtp", error);
-        Swal.fire({
-            icon: "error",
-            title: "Server Error",
-            text: "Unable to connect to server",
-        });
-    }
 }
 
 function closechangeForgotModal() {
@@ -280,6 +260,37 @@ async function submitNewPassword(){
             text: "Unable to connect to server",
         });
     }
+}
+
+function openAdminPasscode() {
+    Swal.fire({
+        title: '<i class="fa-solid fa-shield-halved" style="color:#0F6577"></i> Admin Access',
+        input: 'password',
+        inputPlaceholder: 'Enter passcode',
+        inputAttributes: { autocomplete: 'off' },
+        showCancelButton: true,
+        confirmButtonText: 'Enter',
+        confirmButtonColor: '#0F6577',
+        cancelButtonColor: '#aaa',
+        inputValidator: (value) => {
+            if (!value) return 'Please enter the passcode';
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (result.value === 'smartattend@admin') {
+                sessionStorage.setItem('adminGate', 'granted');
+                window.location.href = '/body/adminLogin.html';
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Access Denied',
+                    text: 'Incorrect passcode.',
+                    timer: 1800,
+                    showConfirmButton: false
+                });
+            }
+        }
+    });
 }
 
 function newPassToggle(){

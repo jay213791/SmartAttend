@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <script>
+        if (sessionStorage.getItem('adminGate') !== 'granted') {
+            window.location.replace('/body/login.html');
+        }
+    </script>
+    <link rel="stylesheet" href="../style/adminLogin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" sizes="50x50" href="../assets/SmartAttend-LOGO.jpg">
+</head>
+<body>
+<div class="main-container">
+
+    <div class="left-container">
+        <div class="left-content">
+            <div class="lock-icon-wrap">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h1>Admin Portal</h1>
+            <p class="tagline">Restricted Access Only</p>
+            <div class="divider"></div>
+            <p class="description">This portal is exclusively for authorized administrators of the SmartAttend system.</p>
+            <div class="security-badges">
+                <span><i class="fa-solid fa-lock"></i> Encrypted</span>
+                <span><i class="fa-solid fa-eye-slash"></i> Private</span>
+                <span><i class="fa-solid fa-user-shield"></i> Admin Only</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-container">
+        <div class="form-header">
+            <div class="form-icon"><i class="fa-solid fa-fingerprint"></i></div>
+            <h2>Secure Sign In</h2>
+            <p class="form-sub">Enter your credentials to access the admin dashboard</p>
+        </div>
+
+        <form id="adminLoginForm">
+            <div class="input-group">
+                <label>Email Address</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="email" placeholder="admin@smartattend.com" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <span class="toggle-password" onclick="togglePw()">
+                        <i id="eyeIcon" class="fas fa-eye"></i>
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit">
+                <i class="fa-solid fa-right-to-bracket"></i> Access Dashboard
+            </button>
+        </form>
+
+        <p class="warning-note"><i class="fa-solid fa-triangle-exclamation"></i> Unauthorized access is strictly prohibited</p>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const res = await fetch('/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (res.ok) {
+            window.location.href = '/body/adminDashboard.html';
+        } else {
+            const msg = await res.text();
+            Swal.fire({ icon: 'error', title: 'Access Denied', text: msg });
+        }
+    });
+
+    function togglePw() {
+        const input = document.getElementById('password');
+        const icon = document.getElementById('eyeIcon');
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        icon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+    }
+</script>
+</body>
+</html>
